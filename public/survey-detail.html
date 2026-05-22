@@ -18,7 +18,7 @@
     .submit-btn:hover {background:#e67e22;}
     .back-link {display:inline-block; margin-bottom:20px; color:#3498db; text-decoration:none;}
     .info-box {background:#e8f4fd; padding:12px; border-radius:8px; margin-bottom:20px; text-align:center; color:#2980b9; font-weight:500;}
-    .lock-box {background:#ffebee; color:#c62828; padding:20px; border-radius:10px; text-align:center; border:2px solid #ef9a9a;}
+    .lock-box {background:#ffebee; color:#c62828; padding:25px; border-radius:10px; text-align:center; border:2px solid #ef9a9a; margin-top:30px;}
     .pay-btn {background:#d32f2f; color:white; border:none; padding:12px 25px; border-radius:8px; font-weight:bold; font-size:16px; margin-top:15px; cursor:pointer; text-decoration:inline-block;}
   </style>
 </head>
@@ -28,15 +28,15 @@
     <a href="dashboard.html" class="back-link">⬅️ Back to Dashboard</a>
 
     <div class="info-box">
-      Rule: Earn freely up to <strong>300 Ksh</strong> | Pay 100 Ksh activation to unlock & reach 1000 Ksh
+      ℹ️ Rule: Earn freely up to <strong>300 Ksh</strong> | Pay 100 Ksh only when locked to continue
     </div>
 
-    <!-- 🔒 LOCKED MESSAGE - SHOWS ONLY IF REACHED 300 & NOT PAID -->
+    <!-- 🔒 LOCKED MESSAGE - ONLY SHOWS AFTER REACHING 300 -->
     <div id="lockedMessage" class="lock-box" style="display:none;">
       <h2>🔒 ACCOUNT LOCKED AT 300 KSH</h2>
-      <p>You have reached the free earning limit!</p>
-      <p><strong>Pay Activation Fee: 100 Ksh</strong><br>
-      Send to: <strong>0117198698 - Gateway Digital</strong></p>
+      <p><strong>Congratulations! You have earned your first 300 Ksh freely!</strong></p>
+      <p>To continue earning and unlock the remaining amount up to 1000 Ksh, please pay activation fee:</p>
+      <p style="font-size:17px; font-weight:bold; margin:10px 0;">Pay: 100 Ksh<br>Send to: <span style="color:#d32f2f;">0117198698 - Gateway Digital</span></p>
       <a href="verify.html" class="pay-btn">✅ PAY NOW & UNLOCK</a>
     </div>
 
@@ -89,14 +89,14 @@
     function getBalance() { return parseInt(localStorage.getItem('userBalance')) || 0; }
     function isActivated() { return localStorage.getItem('activated') === 'yes'; }
 
-    // CHECK IF USER IS LOCKED
+    // ✅ CHECK: ONLY LOCK IF BALANCE >=300 AND NOT ACTIVATED
     let currentBal = getBalance();
     if (currentBal >= 300 && !isActivated()) {
       // SHOW LOCK MESSAGE, HIDE SURVEY
       document.getElementById('lockedMessage').style.display = 'block';
       document.getElementById('surveyContent').style.display = 'none';
     } else {
-      // LOAD SURVEY NORMALLY
+      // ✅ ALLOW TO WORK FREELY IF BELOW 300 OR ACTIVATED
       const current = surveys.find(s => s.id === surveyId);
       if (current) {
         document.getElementById('survey-title').textContent = current.title;
@@ -123,16 +123,16 @@
         e.preventDefault();
         let newBal = getBalance() + current.reward;
 
-        // RULE 1: STOP AT 300 IF NOT ACTIVATED
-        if (!isActivated() && newBal > 300) {
-          newBal = 300; // Lock exactly at 300
+        // RULE 1: FREE MODE - STOP EXACTLY AT 300
+        if (!isActivated() && newBal >= 300) {
+          newBal = 300; // Lock exactly here
           localStorage.setItem('userBalance', newBal);
-          alert(`🔒 REACHED LIMIT: 300 KSH!\n\nYou cannot earn more until you pay activation fee of 100 Ksh to 0117198698`);
+          alert(`🔒 ACCOUNT LOCKED!\n\nYou have earned ${newBal} Ksh successfully!\n\nTo continue earning up to 1000 Ksh:\n✅ Pay 100 Ksh to: 0117198698`);
           window.location.href = "dashboard.html";
           return;
         }
 
-        // RULE 2: MAX 1000 KSH AFTER ACTIVATION
+        // RULE 2: ACTIVATED MODE - STOP AT 1000
         if (isActivated() && newBal > 1000) {
           newBal = 1000;
         }

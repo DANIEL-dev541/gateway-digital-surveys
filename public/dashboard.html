@@ -19,8 +19,7 @@
         .status-text {font-size:15px; font-weight:bold; margin-top:8px;}
         .btn {display:block; width:100%; text-align:center; padding:15px; border-radius:8px; text-decoration:none; font-weight:bold; font-size:16px; margin:15px 0;}
         .btn-primary {background-color:#f39c12; color:white;}
-        .btn-primary:disabled {background:#bdc3c7; cursor:not-allowed;}
-        .btn-pay {background-color:#d32f2f; color:white;}
+        .btn-pay {background-color:#d32f2f; color:white; display:none;}
         .btn-withdraw {background-color:#27ae60; color:white; display:none;}
         .info {background:white; padding:20px; border-radius:10px; box-shadow:0 2px 5px rgba(0,0,0,0.1); text-align:center; color:#555; line-height:1.6;}
     </style>
@@ -31,7 +30,7 @@
         <h2>GATEWAY DIGITAL</h2>
         <div>
             <a href="dashboard.html">Dashboard</a>
-            <a href="surveys.html" id="surveysLink">Available Surveys</a>
+            <a href="surveys.html">Available Surveys</a>
             <a href="tasks.html">Tasks</a>
             <a href="#">Logout</a>
         </div>
@@ -45,16 +44,16 @@
         </div>
 
         <a href="surveys.html" class="btn btn-primary" id="startBtn">📋 START NEW SURVEY</a>
-        <a href="verify.html" class="btn btn-pay" id="payBtn" style="display:none;">🔓 PAY 100 KSH & UNLOCK</a>
+        <a href="verify.html" class="btn btn-pay" id="payBtn">🔓 PAY 100 KSH & UNLOCK</a>
         <a href="verify.html" class="btn btn-withdraw" id="withdrawBtn">💳 WITHDRAW 1000 KSH</a>
 
         <div class="info">
             <p><strong>📌 HOW IT WORKS:</strong><br>
-            ✅ Earn freely up to <strong>300 Ksh</strong> (free limit)<br>
-            🔒 <strong>At 300 Ksh → Account LOCKS automatically</strong><br>
-            💳 Pay Activation Fee: <strong>100 Ksh to 0117198698</strong><br>
-            ✅ After payment: UNLOCKED → earn up to <strong>1000 Ksh max</strong><br>
-            💰 At 1000 Ksh: Withdraw & get paid instantly
+            ✅ <strong>FREE START:</strong> No payment needed to begin<br>
+            ✅ <strong>EARN FREELY:</strong> Work & earn up to <strong>300 Ksh</strong> for free<br>
+            🔒 <strong>AT 300 KSH:</strong> Account LOCKS automatically → Pay 100 Ksh to <strong>0117198698</strong><br>
+            ✅ <strong>AFTER PAYMENT:</strong> Unlocked → earn up to <strong>1000 Ksh max</strong><br>
+            💰 <strong>AT 1000 KSH:</strong> Withdraw & get paid instantly
             </p>
         </div>
     </div>
@@ -75,17 +74,19 @@
         // --- STATUS LOGIC ---
         if (!isActivated()) {
             if (bal < 300) {
-                // FREE MODE
-                status.textContent = "✅ FREE MODE: Earn up to 300 Ksh";
+                // ✅ FREE MODE: CAN WORK NORMALLY
+                status.textContent = "✅ FREE EARNING MODE: Earn up to 300 Ksh";
+                startBtn.style.display = 'block';
+                payBtn.style.display = 'none';
             } else {
-                // LOCKED
+                // 🔒 LOCKED: CANNOT WORK - MUST PAY
                 card.classList.add('locked');
-                status.textContent = "🔒 LOCKED: Pay 100 Ksh to continue";
+                status.textContent = "🔒 LOCKED: Pay 100 Ksh to continue earning";
                 startBtn.style.display = 'none';
                 payBtn.style.display = 'block';
             }
         } else {
-            // ACTIVATED
+            // ✅ ACTIVATED: FULL ACCESS
             card.classList.add('activated');
             status.textContent = "🔓 ACTIVATED: Earn up to 1000 Ksh";
             if (bal === 1000) {
