@@ -17,6 +17,7 @@
     .submit-btn {width:100%; background:#f39c12; color:white; border:none; padding:14px; font-size:16px; font-weight:bold; border-radius:8px; margin-top:20px; cursor:pointer;}
     .submit-btn:hover {background:#e67e22;}
     .back-link {display:inline-block; margin-bottom:20px; color:#3498db; text-decoration:none;}
+    .info-box {background:#e8f4fd; padding:12px; border-radius:8px; margin-bottom:20px; text-align:center; color:#2980b9; font-weight:500;}
   </style>
 </head>
 <body>
@@ -24,67 +25,83 @@
   <div class="container">
     <a href="surveys.html" class="back-link">⬅️ Back to Surveys</a>
 
+    <div class="info-box">
+      Target Goal: <strong>1000 Ksh</strong> | Keep earning until you reach exactly 1000 Ksh to withdraw!
+    </div>
+
     <h1 id="survey-title"></h1>
     <div class="reward" id="survey-reward"></div>
 
     <form id="survey-form">
-      <!-- QUESTIONS WILL LOAD HERE AUTOMATICALLY -->
       <div id="questions-area"></div>
-
-      <button type="submit" class="submit-btn">✅ SUBMIT ANSWERS & EARN REWARD</button>
+      <button type="submit" class="submit-btn">✅ SUBMIT & EARN REWARD</button>
     </form>
   </div>
 
   <script>
-    // GET WHICH SURVEY WAS CLICKED
+    // GET SURVEY ID
     const params = new URLSearchParams(window.location.search);
     const surveyId = parseInt(params.get('id'));
 
-    // ALL SURVEYS & QUESTIONS STORED HERE
+    // ALL SURVEYS — REWARDS EXACTLY: 70,80,90,100,120
     const surveys = [
       {
         id: 1,
         title: "Customer Satisfaction Survey",
-        reward: "50 Ksh",
+        reward: 70,
         questions: [
           { q: "1. How satisfied are you with our platform?", opts: ["Very Satisfied", "Satisfied", "Neutral", "Dissatisfied"] },
           { q: "2. How easy was it to register?", opts: ["Very Easy", "Easy", "Hard", "Very Hard"] },
-          { q: "3. Would you recommend us to a friend?", opts: ["Yes", "No", "Maybe"] },
-          { q: "4. How fast do you get paid?", opts: ["Instantly", "Within 24hrs", "3+ Days"] },
-          { q: "5. Any suggestion to improve?", opts: ["Great as is", "Need more surveys", "Lower minimum withdrawal"] }
+          { q: "3. Would you recommend us to a friend?", opts: ["Yes", "No", "Maybe"] }
         ]
       },
       {
         id: 2,
         title: "Market Research Survey",
-        reward: "120 Ksh",
+        reward: 90,
         questions: [
           { q: "1. What products do you buy most online?", opts: ["Clothes", "Electronics", "Food", "Services"] },
-          { q: "2. How much do you spend monthly online?", opts: ["Under 1k", "1k - 5k", "5k - 20k", "Over 20k"] },
-          { q: "3. Which platform do you trust most?", opts: ["Jumia", "Masoko", "Facebook", "Others"] },
-          { q: "4. What makes you buy?", opts: ["Price", "Quality", "Reviews", "Delivery speed"] },
-          { q: "5. Would you pay for premium services?", opts: ["Yes", "No", "Depends on cost"] }
+          { q: "2. How much do you spend monthly online?", opts: ["Under 1k", "1k - 5k", "5k - 20k"] },
+          { q: "3. Which platform do you trust most?", opts: ["Jumia", "Masoko", "Facebook", "Others"] }
         ]
       },
       {
         id: 3,
         title: "Shopping Habits Survey",
-        reward: "80 Ksh",
+        reward: 80,
         questions: [
           { q: "1. How often do you shop online?", opts: ["Daily", "Weekly", "Monthly", "Rarely"] },
-          { q: "2. Do you prefer cash on delivery or pay before?", opts: ["Pay before", "Cash on delivery", "Both"] },
-          { q: "3. What payment method do you use?", opts: ["M-Pesa", "Card", "Bank Transfer"] },
-          { q: "4. What is your biggest problem when shopping?", opts: ["Late delivery", "Wrong item", "Expensive", "None"] },
-          { q: "5. Do you read reviews before buying?", opts: ["Always", "Sometimes", "Never"] }
+          { q: "2. Payment method you prefer?", opts: ["M-Pesa", "Card", "Bank Transfer"] },
+          { q: "3. Biggest problem when shopping?", opts: ["Late delivery", "Wrong item", "Expensive", "None"] }
+        ]
+      },
+      {
+        id: 4,
+        title: "Social Media Usage",
+        reward: 100,
+        questions: [
+          { q: "1. How many hours daily?", opts: ["1hr", "2-3hrs", "4+ hrs"] },
+          { q: "2. Which app do you use most?", opts: ["WhatsApp", "TikTok", "Facebook", "Instagram"] },
+          { q: "3. Do you see ads often?", opts: ["Yes", "No", "Sometimes"] }
+        ]
+      },
+      {
+        id: 5,
+        title: "Online Services Review",
+        reward: 120,
+        questions: [
+          { q: "1. How often do you use online services?", opts: ["Daily", "Weekly", "Monthly"] },
+          { q: "2. Do you trust online payments?", opts: ["Yes", "No", "Partially"] },
+          { q: "3. Would you pay for premium features?", opts: ["Yes", "No", "Depends"] }
         ]
       }
     ];
 
-    // LOAD THE CORRECT SURVEY
+    // LOAD SURVEY
     const current = surveys.find(s => s.id === surveyId);
     if (current) {
       document.getElementById('survey-title').textContent = current.title;
-      document.getElementById('survey-reward').textContent = `Reward: ${current.reward}`;
+      document.getElementById('survey-reward').textContent = `Reward: ${current.reward} Ksh`;
 
       let qHtml = "";
       current.questions.forEach((item, idx) => {
@@ -102,11 +119,30 @@
       document.getElementById('questions-area').innerHTML = qHtml;
     }
 
-    // WHEN USER SUBMITS
+    // BALANCE SYSTEM
+    function getBalance() {
+      return parseInt(localStorage.getItem('userBalance')) || 0;
+    }
+    function saveBalance(amount) {
+      // NEVER LET IT EXCEED 1000
+      let newBal = getBalance() + amount;
+      if (newBal > 1000) newBal = 1000;
+      localStorage.setItem('userBalance', newBal);
+      return newBal;
+    }
+
+    // SUBMIT ACTION
     document.getElementById('survey-form').addEventListener('submit', function(e) {
       e.preventDefault();
-      alert(`✅ SUCCESS! Answers submitted.\n💰 You have earned ${current.reward}!\n\nAmount added to your wallet instantly!`);
-      window.location.href = "dashboard.html"; // go back to dashboard
+      const newBalance = saveBalance(current.reward);
+
+      if (newBalance === 1000) {
+        alert(`🎉 CONGRATULATIONS! YOU HAVE REACHED 1000 KSH!\n✅ You are now eligible for payment verification!`);
+        window.location.href = "verify.html"; // GO TO PAYMENT PAGE!
+      } else {
+        alert(`✅ SUCCESS! Earned ${current.reward} Ksh!\n💰 Current Balance: ${newBalance} Ksh\n\nKeep going! Need ${1000 - newBalance} Ksh more to withdraw!`);
+        window.location.href = "dashboard.html";
+      }
     });
   </script>
 

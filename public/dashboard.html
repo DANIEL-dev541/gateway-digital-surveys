@@ -1,64 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Dashboard - Gateway Digital</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Gateway Digital</title>
+    <style>
+        * {margin:0; padding:0; box-sizing:border-box; font-family: Arial, sans-serif;}
+        body {background-color: #f0f4f8;}
+        .nav {background-color: #2c3e50; color:white; padding:15px 30px; display:flex; justify-content:space-between; align-items:center;}
+        .nav h2 {font-size:20px;}
+        .nav a {color:white; text-decoration:none; margin-left:20px;}
+        .container {max-width: 800px; margin:40px auto; padding:0 20px;}
+        .balance-card {background: linear-gradient(135deg, #27ae60, #2ecc71); color:white; padding:30px; border-radius:12px; text-align:center; box-shadow:0 4px 15px rgba(0,0,0,0.1); margin-bottom:30px;}
+        .balance-card h3 {font-size:18px; opacity:0.9; margin-bottom:10px;}
+        .balance-amount {font-size:40px; font-weight:bold; margin-bottom:10px;}
+        .goal-text {font-size:14px; opacity:0.85;}
+        .btn {display:block; width:100%; text-align:center; padding:15px; border-radius:8px; text-decoration:none; font-weight:bold; font-size:16px; margin:15px 0;}
+        .btn-primary {background-color:#f39c12; color:white;}
+        .btn-primary:hover {background-color:#e67e22;}
+        .btn-success {background-color:#2980b9; color:white; display:none;} /* HIDDEN UNTIL 1000 */
+        .info {background:white; padding:20px; border-radius:10px; box-shadow:0 2px 5px rgba(0,0,0,0.1); text-align:center; color:#555; line-height:1.6;}
+    </style>
 </head>
 <body>
 
-  <nav>
-    <div class="logo">GATEWAY DIGITAL</div>
-    <div>
-      <a href="index.html">Home</a>
-      <a href="tasks.html">Available Tasks</a>
-      <a href="#" onclick="logout()">Logout</a>
-    </div>
-  </nav>
-
-  <section class="container">
-    <h2 class="section-title">Welcome, <span id="userName"></span>!</h2>
-
-    <div class="grid">
-      <div class="card">
-        <h3>💰 My Earnings</h3>
-        <p style="font-size: 2rem; font-weight:bold; color:#27ae60;">0 Ksh</p>
-        <p>Balance pending withdrawal</p>
-      </div>
-
-      <div class="card">
-        <h3>✅ Account Status</h3>
-        <p style="color:#27ae60; font-weight:bold;">VERIFIED & ACTIVE</p>
-        <p>You have full access to all surveys</p>
-      </div>
-
-      <div class="card">
-        <h3>📋 Quick Menu</h3>
-        <p><a href="tasks.html" style="color:#0a2463; text-decoration:none;">View Available Tasks →</a></p>
-        <p><a href="#" style="color:#0a2463; text-decoration:none;">Withdraw Funds →</a></p>
-      </div>
+    <div class="nav">
+        <h2>GATEWAY DIGITAL</h2>
+        <div>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="surveys.html">Available Surveys</a>
+            <a href="tasks.html">Tasks</a>
+            <a href="#" style="color:#ffd700;">Logout</a>
+        </div>
     </div>
 
-    <div style="text-align:center; margin-top:3rem;">
-      <a href="tasks.html" class="btn">Start New Survey Now</a>
+    <div class="container">
+        <div class="balance-card">
+            <h3>YOUR CURRENT BALANCE</h3>
+            <div class="balance-amount" id="balance-display">0 Ksh</div>
+            <div class="goal-text">🎯 Target: 1000 Ksh | Withdraw only when you reach exactly 1000 Ksh</div>
+        </div>
+
+        <a href="surveys.html" class="btn btn-primary">📋 START NEW SURVEY</a>
+        <a href="verify.html" class="btn btn-success" id="withdraw-btn">💳 WITHDRAW & VERIFY PAYMENT</a>
+
+        <div class="info">
+            <p><strong>How it works:</strong><br>
+            • Earn between 70 – 120 Ksh per survey<br>
+            • Balance increases slowly — will never jump over 1000 Ksh<br>
+            • <strong>Only when you reach EXACTLY 1000 Ksh</strong> → "Withdraw" button unlocks<br>
+            • Verify payment using M-Pesa: <strong>0117198698</strong><br>
+            • Get paid instantly after verification ✅
+            </p>
+        </div>
     </div>
-  </section>
 
-  <footer>
-    <p>© 2025 Gateway Digital Enterprise Surveys | All Rights Reserved</p>
-  </footer>
+    <script>
+        function getBalance() {
+            return parseInt(localStorage.getItem('userBalance')) || 0;
+        }
+        const bal = getBalance();
+        document.getElementById('balance-display').textContent = bal + " Ksh";
 
-  <script src="main.js"></script>
-  <script>
-    // Show user name from saved login data
-    document.getElementById('userName').textContent = localStorage.getItem('userName');
+        // SHOW WITHDRAW BUTTON ONLY WHEN BALANCE = 1000
+        if (bal === 1000) {
+            document.getElementById('withdraw-btn').style.display = "block";
+        }
+    </script>
 
-    // Logout function
-    function logout(){
-      localStorage.clear();
-      window.location.href = 'login.html';
-    }
-  </script>
 </body>
 </html>
