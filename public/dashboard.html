@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Dashboard - Gateway Digital</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <nav>
+    <div class="logo">GATEWAY DIGITAL</div>
+    <div>
+      <a href="index.html">Home</a>
+      <a href="tasks.html">Available Tasks</a>
+      <a href="#" onclick="logout()">Logout</a>
+    </div>
+  </nav>
+
+  <section class="container">
+    <h2 class="section-title">Welcome, <span id="userName"></span>!</h2>
+
+    <div class="grid">
+      <div class="card">
+        <h3>💰 My Earnings</h3>
+        <p style="font-size: 2rem; font-weight:bold; color:#27ae60;">0 Ksh</p>
+        <p>Balance pending withdrawal</p>
+      </div>
+
+      <div class="card">
+        <h3>✅ Account Status</h3>
+        <p style="color:#27ae60; font-weight:bold;">VERIFIED & ACTIVE</p>
+        <p>You have full access to all surveys</p>
+      </div>
+
+      <div class="card">
+        <h3>📋 Quick Menu</h3>
+        <p><a href="tasks.html" style="color:#0a2463; text-decoration:none;">View Available Tasks →</a></p>
+        <p><a href="#" style="color:#0a2463; text-decoration:none;">Withdraw Funds →</a></p>
+      </div>
+    </div>
+
+    <div style="text-align:center; margin-top:3rem;">
+      <a href="tasks.html" class="btn">Start New Survey Now</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 Gateway Digital Enterprise Surveys | All Rights Reserved</p>
+  </footer>
+
+  <script src="main.js"></script>
+  <script>
+    // Show user name from saved login data
+    document.getElementById('userName').textContent = localStorage.getItem('userName');
+
+    // Logout function
+    function logout(){
+      localStorage.clear();
+      window.location.href = 'login.html';
+    }
+  </script>
+</body>
+</html>

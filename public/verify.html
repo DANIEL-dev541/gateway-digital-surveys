@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verify Account - Gateway Digital</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <nav>
+    <div class="logo">GATEWAY DIGITAL</div>
+    <div><a href="index.html">Home</a></div>
+  </nav>
+
+  <div class="form-container">
+    <h2 style="text-align:center; color:#0a2463; margin-bottom:1.5rem;">Account Verification</h2>
+    
+    <div style="background:#fff3cd; padding:1rem; border-radius:6px; margin-bottom:1.5rem; text-align:center;">
+      <p><strong>Pay Activation Fee: 100 Ksh</strong></p>
+      <p>Send money to: <strong>0712345678 - Gateway Digital</strong></p>
+      <p>Enter the transaction code below after payment</p>
+    </div>
+
+    <div id="messageBox"></div>
+
+    <form id="verifyForm">
+      <div class="form-group">
+        <label>Transaction Code</label>
+        <input type="text" id="transCode" required placeholder="e.g. QWE12345XYZ">
+      </div>
+      <button type="submit" class="btn" style="width:100%">Confirm Payment</button>
+    </form>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>

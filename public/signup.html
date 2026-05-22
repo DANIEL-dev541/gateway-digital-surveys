@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up - Gateway Digital</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <nav>
+    <div class="logo">GATEWAY DIGITAL</div>
+    <div>
+      <a href="index.html">Home</a>
+      <a href="tasks.html">Available Tasks</a>
+      <a href="signup.html">Sign Up</a>
+      <a href="login.html">Login</a>
+    </div>
+  </nav>
+
+  <div class="form-container">
+    <h2 style="text-align:center; color:#0a2463; margin-bottom:1.5rem;">Create Your Account</h2>
+    <div id="messageBox"></div>
+
+    <form id="signupForm">
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" name="fullname" required placeholder="Enter your full name">
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" name="email" required placeholder="your@email.com">
+      </div>
+      <div class="form-group">
+        <label>Phone Number</label>
+        <input type="tel" name="phone" required placeholder="e.g. 0712345678">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" name="password" required placeholder="Create strong password">
+      </div>
+      <button type="submit" class="btn" style="width:100%">Register</button>
+    </form>
+
+    <p style="text-align:center; margin-top:1rem;">Already have account? <a href="login.html" style="color:#0a2463; text-decoration:none;">Login here</a></p>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>
