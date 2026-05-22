@@ -9,38 +9,99 @@
         body {background-color:#f0f4f8; padding:30px;}
         .container {max-width:500px; margin:0 auto; background:white; padding:40px; border-radius:12px; box-shadow:0 3px 15px rgba(0,0,0,0.1); text-align:center;}
         h2 {color:#2c3e50; margin-bottom:20px;}
-        .note {background:#fff3cd; color:#856404; padding:15px; border-radius:8px; margin-bottom:25px; font-weight:500; font-size:16px;}
+        .note {background:#fff3cd; color:#856404; padding:15px; border-radius:8px; margin-bottom:25px; font-weight:500; font-size:16px; line-height:1.5;}
+        .security-note {background:#e3f2fd; color:#1565c0; padding:10px; border-radius:8px; margin-bottom:20px; font-size:14px; border:1px solid #bbdefb;}
         label {display:block; text-align:left; margin-bottom:8px; color:#555; font-weight:500;}
-        input {width:100%; padding:12px; border:1px solid #ddd; border-radius:6px; margin-bottom:20px; font-size:15px;}
-        .btn {width:100%; background:#d32f2f; color:white; border:none; padding:14px; border-radius:8px; font-weight:bold; font-size:16px; cursor:pointer;}
+        input {width:100%; padding:12px; border:1px solid #ddd; border-radius:6px; margin-bottom:8px; font-size:15px; text-transform:uppercase;}
+        .hint {font-size:12px; color:#888; margin-bottom:20px; text-align:left;}
+        .btn {width:100%; background:#d32f2f; color:white; border:none; padding:14px; border-radius:8px; font-weight:bold; font-size:16px; cursor:pointer; transition:0.3s;}
+        .btn:disabled {background:#bdbdbd; cursor:not-allowed;}
         .btn.success {background:#27ae60;}
+        .error {color:#d32f2f; font-size:14px; margin:8px 0; display:none;}
+        .success {color:#27ae60; font-size:14px; margin:8px 0; display:none;}
     </style>
 </head>
 <body>
     <div class="container">
         <h2>✅ ACTIVATION / WITHDRAWAL</h2>
+        
         <div class="note">
             <strong>Send EXACTLY: 100 Ksh</strong><br>
             To Number: <strong style="font-size:18px; color:#d35400;">0117198698</strong><br>
             Account Name: <strong>Gateway Digital Enterprise</strong>
         </div>
 
-        <label>Enter M-Pesa Transaction Code (e.g. RWE45TY7):</label>
-        <input type="text" id="transCode" placeholder="Enter code after payment" required>
+        <div class="security-note">
+            🔒 <strong>SECURITY CHECK:</strong> System verifies code format automatically. Only valid M-Pesa codes accepted.
+        </div>
 
-        <button class="btn" onclick="confirmPayment()">✅ CONFIRM & UNLOCK ACCOUNT</button>
+        <label>Enter M-Pesa Transaction Code:</label>
+        <input type="text" id="transCode" placeholder="e.g. QWE123456R" maxlength="10" oninput="this.value = this.value.toUpperCase()">
+        <div class="hint">Format: 1 Letter + 9 Characters (Total 10)</div>
+        
+        <div class="error" id="errorMsg">❌ INVALID CODE! Must be 10 characters, mix of letters & numbers. Example: RWE45TY7UI</div>
+        <div class="success" id="successMsg">✅ CODE FORMAT ACCEPTED! Verifying...</div>
+
+        <button class="btn" id="confirmBtn" onclick="validateAndConfirm()">✅ CONFIRM & UNLOCK ACCOUNT</button>
     </div>
 
     <script>
-        function confirmPayment() {
-            const code = document.getElementById('transCode').value.trim();
-            if (code === "") { alert("Please enter transaction code!"); return; }
+        function validateAndConfirm() {
+            const codeInput = document.getElementById('transCode').value.trim();
+            const errorMsg = document.getElementById('errorMsg');
+            const successMsg = document.getElementById('successMsg');
+            const confirmBtn = document.getElementById('confirmBtn');
+
+            // 🔒 1. CHECK IF EMPTY
+            if (codeInput === "") {
+                errorMsg.textContent = "❌ Please enter transaction code first!";
+                errorMsg.style.display = "block";
+                successMsg.style.display = "none";
+                return;
+            }
+
+            // 🔒 2. CHECK LENGTH: MUST BE EXACTLY 10 CHARACTERS
+            if (codeInput.length !== 10) {
+                errorMsg.textContent = "❌ INVALID CODE! Must be exactly 10 characters long. Check your SMS message.";
+                errorMsg.style.display = "block";
+                successMsg.style.display = "none";
+                return;
+            }
+
+            // 🔒 3. MUST START WITH A LETTER (Real M-Pesa codes always start with letter)
+            const startsWithLetter = /^[A-Z]/.test(codeInput);
+            if (!startsWithLetter) {
+                errorMsg.textContent = "❌ INVALID CODE! Must START with a LETTER. Example: R... , Q... , S...";
+                errorMsg.style.display = "block";
+                successMsg.style.display = "none";
+                return;
+            }
+
+            // 🔒 4. MUST HAVE BOTH LETTERS AND NUMBERS (Not all letters, Not all numbers)
+            const hasLetters = /[A-Z]/.test(codeInput);
+            const hasNumbers = /[0-9]/.test(codeInput);
+            if (!hasLetters || !hasNumbers) {
+                errorMsg.textContent = "❌ INVALID CODE! Must contain BOTH letters and numbers.";
+                errorMsg.style.display = "block";
+                successMsg.style.display = "none";
+                return;
+            }
+
+            // ✅ IF ALL CHECKS PASSED:
+            errorMsg.style.display = "none";
+            successMsg.style.display = "block";
+            confirmBtn.disabled = true;
+            confirmBtn.classList.add('success');
+            confirmBtn.textContent = "✅ PROCESSING...";
 
             // ✅ MARK ACCOUNT AS ACTIVATED FOREVER
             localStorage.setItem('activated', 'yes');
+            localStorage.setItem('paymentCode', codeInput); // Save code for your record
 
-            alert(`🎉 PAYMENT CONFIRMED!\n\n✅ Account UNLOCKED successfully!\n✅ You can now earn up to 1000 Ksh & withdraw!\n\nRedirecting to Dashboard...`);
-            window.location.href = "dashboard.html";
+            setTimeout(() => {
+                alert(`🎉 PAYMENT SUCCESSFUL!\n\n✅ Account UNLOCKED permanently!\n✅ Verification Code Saved: ${codeInput}\n\nYou can now earn up to 1000 Ksh and withdraw anytime!\n\nRedirecting to Dashboard...`);
+                window.location.href = "dashboard.html";
+            }, 1500);
         }
     </script>
 </body>
