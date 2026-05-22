@@ -3,32 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Account Verification | Gateway Digital</title>
+    <title>Verification | Gateway Digital</title>
     <style>
         * {margin:0; padding:0; box-sizing:border-box; font-family:Arial, sans-serif;}
         body {background-color:#f0f4f8; padding:30px;}
         .container {max-width:500px; margin:0 auto; background:white; padding:40px; border-radius:12px; box-shadow:0 3px 15px rgba(0,0,0,0.1); text-align:center;}
         h2 {color:#2c3e50; margin-bottom:20px;}
-        .note {background:#fff3cd; color:#856404; padding:15px; border-radius:8px; margin-bottom:25px; font-weight:500;}
+        .note {background:#fff3cd; color:#856404; padding:15px; border-radius:8px; margin-bottom:25px; font-weight:500; font-size:16px;}
         label {display:block; text-align:left; margin-bottom:8px; color:#555; font-weight:500;}
         input {width:100%; padding:12px; border:1px solid #ddd; border-radius:6px; margin-bottom:20px; font-size:15px;}
-        .btn {width:100%; background:#f39c12; color:white; border:none; padding:14px; border-radius:8px; font-weight:bold; font-size:16px; cursor:pointer;}
-        .btn:hover {background:#e67e22;}
+        .btn {width:100%; background:#d32f2f; color:white; border:none; padding:14px; border-radius:8px; font-weight:bold; font-size:16px; cursor:pointer;}
+        .btn.success {background:#27ae60;}
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>✅ Account Verification</h2>
+        <h2>✅ ACTIVATION / WITHDRAWAL</h2>
         <div class="note">
-            <strong>Pay Activation/Withdrawal Fee: 100 Ksh</strong><br>
-            Send money to: <strong style="font-size:17px; color:#d35400;">0117198698 - Gateway Digital</strong><br>
-            <small>(This number is permanent and secure)</small>
+            <strong>Send EXACTLY: 100 Ksh</strong><br>
+            To Number: <strong style="font-size:18px; color:#d35400;">0117198698</strong><br>
+            Account Name: <strong>Gateway Digital Enterprise</strong>
         </div>
 
-        <label>Enter Transaction Code after payment:</label>
-        <input type="text" placeholder="e.g. QWE1234XYZ" required>
+        <label>Enter M-Pesa Transaction Code (e.g. RWE45TY7):</label>
+        <input type="text" id="transCode" placeholder="Enter code after payment" required>
 
-        <button class="btn">✅ CONFIRM PAYMENT & RECEIVE FUNDS</button>
+        <button class="btn" onclick="confirmPayment()">✅ CONFIRM & UNLOCK ACCOUNT</button>
     </div>
+
+    <script>
+        function confirmPayment() {
+            const code = document.getElementById('transCode').value.trim();
+            if (code === "") { alert("Please enter transaction code!"); return; }
+
+            // ✅ MARK ACCOUNT AS ACTIVATED FOREVER
+            localStorage.setItem('activated', 'yes');
+
+            alert(`🎉 PAYMENT CONFIRMED!\n\n✅ Account UNLOCKED successfully!\n✅ You can now earn up to 1000 Ksh & withdraw!\n\nRedirecting to Dashboard...`);
+            window.location.href = "dashboard.html";
+        }
+    </script>
 </body>
 </html>
