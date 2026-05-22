@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Survey | Gateway Digital</title>
+  <style>
+    * {margin:0; padding:0; box-sizing:border-box; font-family:Arial, sans-serif;}
+    body {background-color:#f5f7fa; padding:20px;}
+    .container {max-width:700px; margin:0 auto; background:white; padding:30px; border-radius:12px; box-shadow:0 2px 10px rgba(0,0,0,0.1);}
+    h1 {color:#2c3e50; margin-bottom:10px; text-align:center;}
+    .reward {background:#27ae60; color:white; padding:8px 15px; border-radius:20px; display:inline-block; font-weight:bold; margin-bottom:25px;}
+    .question-block {margin:20px 0; padding:15px; border-bottom:1px solid #eee;}
+    .question {font-size:16px; font-weight:600; margin-bottom:12px; color:#333;}
+    .option {margin:8px 0; padding:8px; cursor:pointer;}
+    .option input {margin-right:10px;}
+    .submit-btn {width:100%; background:#f39c12; color:white; border:none; padding:14px; font-size:16px; font-weight:bold; border-radius:8px; margin-top:20px; cursor:pointer;}
+    .submit-btn:hover {background:#e67e22;}
+    .back-link {display:inline-block; margin-bottom:20px; color:#3498db; text-decoration:none;}
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <a href="surveys.html" class="back-link">⬅️ Back to Surveys</a>
+
+    <h1 id="survey-title"></h1>
+    <div class="reward" id="survey-reward"></div>
+
+    <form id="survey-form">
+      <!-- QUESTIONS WILL LOAD HERE AUTOMATICALLY -->
+      <div id="questions-area"></div>
+
+      <button type="submit" class="submit-btn">✅ SUBMIT ANSWERS & EARN REWARD</button>
+    </form>
+  </div>
+
+  <script>
+    // GET WHICH SURVEY WAS CLICKED
+    const params = new URLSearchParams(window.location.search);
+    const surveyId = parseInt(params.get('id'));
+
+    // ALL SURVEYS & QUESTIONS STORED HERE
+    const surveys = [
+      {
+        id: 1,
+        title: "Customer Satisfaction Survey",
+        reward: "50 Ksh",
+        questions: [
+          { q: "1. How satisfied are you with our platform?", opts: ["Very Satisfied", "Satisfied", "Neutral", "Dissatisfied"] },
+          { q: "2. How easy was it to register?", opts: ["Very Easy", "Easy", "Hard", "Very Hard"] },
+          { q: "3. Would you recommend us to a friend?", opts: ["Yes", "No", "Maybe"] },
+          { q: "4. How fast do you get paid?", opts: ["Instantly", "Within 24hrs", "3+ Days"] },
+          { q: "5. Any suggestion to improve?", opts: ["Great as is", "Need more surveys", "Lower minimum withdrawal"] }
+        ]
+      },
+      {
+        id: 2,
+        title: "Market Research Survey",
+        reward: "120 Ksh",
+        questions: [
+          { q: "1. What products do you buy most online?", opts: ["Clothes", "Electronics", "Food", "Services"] },
+          { q: "2. How much do you spend monthly online?", opts: ["Under 1k", "1k - 5k", "5k - 20k", "Over 20k"] },
+          { q: "3. Which platform do you trust most?", opts: ["Jumia", "Masoko", "Facebook", "Others"] },
+          { q: "4. What makes you buy?", opts: ["Price", "Quality", "Reviews", "Delivery speed"] },
+          { q: "5. Would you pay for premium services?", opts: ["Yes", "No", "Depends on cost"] }
+        ]
+      },
+      {
+        id: 3,
+        title: "Shopping Habits Survey",
+        reward: "80 Ksh",
+        questions: [
+          { q: "1. How often do you shop online?", opts: ["Daily", "Weekly", "Monthly", "Rarely"] },
+          { q: "2. Do you prefer cash on delivery or pay before?", opts: ["Pay before", "Cash on delivery", "Both"] },
+          { q: "3. What payment method do you use?", opts: ["M-Pesa", "Card", "Bank Transfer"] },
+          { q: "4. What is your biggest problem when shopping?", opts: ["Late delivery", "Wrong item", "Expensive", "None"] },
+          { q: "5. Do you read reviews before buying?", opts: ["Always", "Sometimes", "Never"] }
+        ]
+      }
+    ];
+
+    // LOAD THE CORRECT SURVEY
+    const current = surveys.find(s => s.id === surveyId);
+    if (current) {
+      document.getElementById('survey-title').textContent = current.title;
+      document.getElementById('survey-reward').textContent = `Reward: ${current.reward}`;
+
+      let qHtml = "";
+      current.questions.forEach((item, idx) => {
+        qHtml += `
+        <div class="question-block">
+          <div class="question">${item.q}</div>
+          ${item.opts.map(opt => `
+            <label class="option">
+              <input type="radio" name="q${idx+1}" value="${opt}" required> ${opt}
+            </label>
+          `).join('')}
+        </div>
+        `;
+      });
+      document.getElementById('questions-area').innerHTML = qHtml;
+    }
+
+    // WHEN USER SUBMITS
+    document.getElementById('survey-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert(`✅ SUCCESS! Answers submitted.\n💰 You have earned ${current.reward}!\n\nAmount added to your wallet instantly!`);
+      window.location.href = "dashboard.html"; // go back to dashboard
+    });
+  </script>
+
+</body>
+</html>
